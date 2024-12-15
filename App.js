@@ -5,13 +5,31 @@ import NotificationsScreen from "./screens/NotificationsScreen";
 import SearchJobTitle from "./screens/SearchJobTitle";
 import SearchLocation from "./screens/SearchLocation";
 import TabNavigator from "./navigators/TabNavigator";
+import SplashScreen from "./screens/SplashScreen";
+import LoginScreen from "./screens/LoginScreen";
+import SignupScreen from "./screens/SignupScreen";
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Tabs">
+      <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignupScreen"
+          component={SignupScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Tabs"
           component={TabNavigator}
