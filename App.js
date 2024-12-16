@@ -8,6 +8,7 @@ import TabNavigator from "./navigators/TabNavigator";
 import SplashScreen from "./screens/SplashScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import ProfileSettings from "./screens/ProfileSettings";
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,11 @@ const App = () => {
           name="SearchLocation"
           component={SearchLocation}
           options={{ title: "" }}
+        />
+        <Stack.Screen
+          name="ProfileSettings"
+          component={ProfileSettings}
+          options={{ title: "Profile Settings" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

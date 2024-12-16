@@ -11,13 +11,28 @@ const DrawerContent = ({ navigation }) => (
       <MaterialCommunityIcons name="close" size={30} color="grey" />
     </TouchableOpacity>
     <TouchableOpacity
-      style={{ marginLeft: 20, marginBottom: 20, padding: 10, borderRadius: 5 }}
-      onPress={() => navigation.navigate("Profile")}
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: "#ccc",
+      }}
+      onPress={() => navigation.navigate("ProfileSettings")}
     >
-      <Text style={{ color: "#333", fontSize: 20, fontWeight: "bold" }}>
-        Profile
+      <Text
+        style={{
+          color: "#333",
+          fontSize: 20,
+          fontWeight: "bold",
+        }}
+      >
+        Profile Settings
       </Text>
+      <MaterialCommunityIcons name="chevron-right" size={24} color="#333" />
     </TouchableOpacity>
   </View>
 );
+
 export default DrawerContent;
