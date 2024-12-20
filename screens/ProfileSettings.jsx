@@ -7,7 +7,6 @@ const ProfileSettings = () => {
   const [password, setPassword] = useState("");
 
   const handleSave = () => {
-    // Add save logic here
     alert("Profile updated successfully!");
   };
 
