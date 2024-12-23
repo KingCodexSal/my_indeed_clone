@@ -1,5 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { auth } from "../firebase";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      navigation.replace("Tabs");
+    }
+  });
+  return unsubscribe;
+}, navigation);
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
