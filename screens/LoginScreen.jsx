@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { auth } from "../firebase";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  getAuth,
+} from "firebase/auth";
 
-useEffect(() => {
+/*useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, (user) => {
     if (user) {
       navigation.replace("Tabs");
     }
   });
   return unsubscribe;
-}, navigation);
-
+}, navigation);*/
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    alert("Logged in!");
-    navigation.replace("Tabs");
+  const handleLogin = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigation.replace("Tabs");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    }
   };
 
   return (

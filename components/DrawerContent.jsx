@@ -10,6 +10,7 @@ const DrawerContent = ({ navigation }) => (
     >
       <MaterialCommunityIcons name="close" size={30} color="grey" />
     </TouchableOpacity>
+
     <TouchableOpacity
       style={{
         flexDirection: "row",
@@ -19,7 +20,10 @@ const DrawerContent = ({ navigation }) => (
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
       }}
-      onPress={() => navigation.navigate("ProfileSettings")}
+      onPress={() => {
+        navigation.navigate("ProfileSettings");
+        navigation.closeDrawer();
+      }}
     >
       <Text
         style={{
@@ -29,6 +33,59 @@ const DrawerContent = ({ navigation }) => (
         }}
       >
         Profile Settings
+      </Text>
+      <MaterialCommunityIcons name="chevron-right" size={24} color="#333" />
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: "#ccc",
+      }}
+      onPress={() => {
+        navigation.navigate("CreateJobs");
+        navigation.closeDrawer();
+      }}
+    >
+      <Text
+        style={{
+          color: "#333",
+          fontSize: 20,
+          fontWeight: "bold",
+        }}
+      >
+        Create Jobs
+      </Text>
+      <MaterialCommunityIcons name="chevron-right" size={24} color="#333" />
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: "#ccc",
+        marginTop: 565,
+      }}
+      onPress={() => {
+        navigation.navigate("LoginScreen");
+        navigation.closeDrawer();
+      }}
+    >
+      <Text
+        style={{
+          color: "#333",
+          fontSize: 20,
+          fontWeight: "bold",
+        }}
+      >
+        Logout
       </Text>
       <MaterialCommunityIcons name="chevron-right" size={24} color="#333" />
     </TouchableOpacity>

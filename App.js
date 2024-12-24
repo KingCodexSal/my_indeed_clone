@@ -9,6 +9,7 @@ import SplashScreen from "./screens/SplashScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import ProfileSettings from "./screens/ProfileSettings";
+import CreateJobs from "./screens/CreateJobs";
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,11 @@ const App = () => {
           name="ProfileSettings"
           component={ProfileSettings}
           options={{ title: "Profile Settings" }}
+        />
+        <Stack.Screen
+          name="CreateJobs"
+          component={CreateJobs}
+          options={{ title: "Create a Job" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
