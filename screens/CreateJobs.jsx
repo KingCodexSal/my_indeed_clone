@@ -4,33 +4,72 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Modal,
   TextInput,
   Alert,
 } from "react-native";
+import Modal from "react-native-modal";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const CreateJobs = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [jobDetails, setJobDetails] = useState({
-    title: "",
-    description: "",
-    salary: "",
-    location: "",
-  });
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [salary, setSalary] = useState("");
+  const [postedBy, setPostedBy] = useState("");
+  const [location, setLocation] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (field, value) => {
-    setJobDetails({ ...jobDetails, [field]: value });
+  const validateForm = () => {
+    if (!title.trim()) {
+      Alert.alert("Validation Error", "Title is required");
+      return false;
+    }
+    if (!description.trim()) {
+      Alert.alert("Validation Error", "Description is required");
+      return false;
+    }
+    if (!salary.trim()) {
+      Alert.alert("Validation Error", "Salary is required");
+      return false;
+    }
+    if (!location.trim()) {
+      Alert.alert("Validation Error", "Location is required");
+      return false;
+    }
+    if (!postedBy.trim()) {
+      Alert.alert("Validation Error", "Posted By is required");
+      return false;
+    }
+    return true;
   };
 
-  const handleAddJob = () => {
-    if (!jobDetails.title || !jobDetails.description) {
-      Alert.alert("Error", "Please fill in all required fields.");
-      return;
-    }
+  const handleAddJob = async () => {
+    if (!validateForm()) return;
+    setLoading(true);
 
-    Alert.alert("Job Added", `Title: ${jobDetails.title}`);
-    setJobDetails({ title: "", description: "", salary: "", location: "" });
-    setModalVisible(false);
+    try {
+      await addDoc(collection(db, "jobs"), {
+        title,
+        description,
+        salary,
+        location,
+        postedBy,
+        createdAt: new Date(),
+      });
+      Alert.alert("Success", "Form submitted successfully");
+      setModalVisible(false);
+      setTitle("");
+      setDescription("");
+      setSalary("");
+      setPostedBy("");
+      setLocation("");
+    } catch (error) {
+      console.error("Error submitting form", error);
+      Alert.alert("Error", "Failed to submit the form. Please try again later");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,10 +86,10 @@ const CreateJobs = () => {
       </View>
 
       <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        isVisible={modalVisible}
+        onSwipeComplete={() => setModalVisible(false)}
+        swipeDirection="down"
+        onBackdropPress={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -58,33 +97,40 @@ const CreateJobs = () => {
             <TextInput
               style={styles.input}
               placeholder="Job Title *"
-              value={jobDetails.title}
-              onChangeText={(text) => handleChange("title", text)}
+              value={title}
+              onChangeText={setTitle}
             />
             <TextInput
               style={[styles.input, { height: 100 }]}
               placeholder="Job Description *"
-              value={jobDetails.description}
-              onChangeText={(text) => handleChange("description", text)}
+              value={description}
+              onChangeText={setDescription}
               multiline
             />
             <TextInput
               style={styles.input}
               placeholder="Salary (Optional)"
-              value={jobDetails.salary}
-              onChangeText={(text) => handleChange("salary", text)}
+              value={salary}
+              onChangeText={setSalary}
               keyboardType="numeric"
             />
             <TextInput
               style={styles.input}
+              placeholder="Posted By"
+              value={postedBy}
+              onChangeText={setPostedBy}
+            />
+            <TextInput
+              style={styles.input}
               placeholder="Location (Optional)"
-              value={jobDetails.location}
-              onChangeText={(text) => handleChange("location", text)}
+              value={location}
+              onChangeText={setLocation}
             />
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={styles.saveButton}
                 onPress={handleAddJob}
+                disabled={loading}
               >
                 <Text style={styles.saveButtonText}>Save</Text>
               </TouchableOpacity>
@@ -150,14 +196,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    margin: 0,
+    padding: 0,
   },
   modalContent: {
-    width: "90%",
+    width: "110%",
+    height: "100%",
     backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
     elevation: 5,
+    marginTop: 100,
   },
   modalHeader: {
     fontSize: 20,
