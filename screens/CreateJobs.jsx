@@ -55,14 +55,12 @@ const CreateJobs = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalHeader}>Job Details</Text>
-
             <TextInput
               style={styles.input}
               placeholder="Job Title *"
               value={jobDetails.title}
               onChangeText={(text) => handleChange("title", text)}
             />
-
             <TextInput
               style={[styles.input, { height: 100 }]}
               placeholder="Job Description *"
@@ -70,7 +68,6 @@ const CreateJobs = () => {
               onChangeText={(text) => handleChange("description", text)}
               multiline
             />
-
             <TextInput
               style={styles.input}
               placeholder="Salary (Optional)"
@@ -78,14 +75,12 @@ const CreateJobs = () => {
               onChangeText={(text) => handleChange("salary", text)}
               keyboardType="numeric"
             />
-
             <TextInput
               style={styles.input}
               placeholder="Location (Optional)"
               value={jobDetails.location}
               onChangeText={(text) => handleChange("location", text)}
             />
-
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={styles.saveButton}

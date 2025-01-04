@@ -67,14 +67,13 @@ const DrawerContent = ({ navigation }) => (
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
+        marginTop: 435,
         padding: 15,
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
-        marginTop: 565,
       }}
       onPress={() => {
-        navigation.navigate("LoginScreen");
+        navigation.replace("LoginScreen");
         navigation.closeDrawer();
       }}
     >
