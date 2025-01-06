@@ -1,36 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
-import { auth } from "../firebase";
+import React, { useState } from "react";
 import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  getAuth,
-} from "firebase/auth";
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
-/*useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      navigation.replace("Tabs");
-    }
-  });
-  return unsubscribe;
-}, navigation);*/
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      setErrorMessage("Please fill in all required fields");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setErrorMessage("Please enter a valid email address");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+      return;
+    }
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigation.replace("Tabs");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      if (error.code === "auth/user-not-found") {
+        setErrorMessage("No user found with this email address");
+      } else if (error.code === "auth/wrong-password") {
+        setErrorMessage("Incorrect password");
+      } else if (error.code === "auth/invalid-credential") {
+        setErrorMessage("Wrong Email / Password");
+      } else {
+        setErrorMessage(error.message);
+      }
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -45,16 +75,20 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Text style={styles.text}>
-        Don't have an account?{" "}
-        <Text
-          style={styles.link}
-          onPress={() => navigation.navigate("SignupScreen")}
-        >
-          Sign up
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <View style={styles.linkContainer}>
+        <Text style={styles.linkText}>
+          Don't have an account?{" "}
+          <Text
+            style={styles.link}
+            onPress={() => navigation.navigate("SignupScreen")}
+          >
+            Create Account
+          </Text>
         </Text>
-      </Text>
+      </View>
     </View>
   );
 };
@@ -64,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
   },
   title: {
     fontSize: 24,
@@ -73,20 +107,38 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    paddingHorizontal: 10,
+    backgroundColor: "#f2f2f2",
+    padding: 10,
+    borderRadius: 5,
     marginBottom: 15,
   },
-  text: {
-    marginTop: 20,
+  button: {
+    backgroundColor: "#6200ee",
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 15,
     textAlign: "center",
   },
+  linkContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  linkText: {
+    color: "#333",
+    fontSize: 14,
+  },
   link: {
-    color: "blue",
-    fontWeight: "bold",
+    color: "#6200ee",
+    fontSize: 14,
   },
 });
 
