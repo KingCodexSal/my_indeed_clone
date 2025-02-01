@@ -27,16 +27,13 @@ const app = express();
 const port = process.env.PORT || 3000; // Provide a default port if `PORT` is undefined
 
 const UserRouter = require("./Router/Student");
-
 const StudentRouter = require("./Router/Salvation");
-
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
 // Use the user router
 app.use("/api/students", UserRouter);
-
 // Use the user router
 app.use("/pia/sal", StudentRouter);
 

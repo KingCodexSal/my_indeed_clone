@@ -4,7 +4,8 @@ const Students = require("../models/Student");
 const bcrypt = require("bcrypt");
 
 router.post("/signup", async (req, res) => {
-  let { name, email, password } = req.body;
+ 
+    let { name, email, password } = req.body;
 
   // Trim the input fields
   name = name.trim();
